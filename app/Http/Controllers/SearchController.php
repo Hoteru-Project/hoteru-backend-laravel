@@ -15,21 +15,11 @@ class SearchController extends Controller
         $response = Http::get(self::URL);
         return json_decode($response);
     }
-    public function getHotelById($id)
+    public function getHotelById($id): JsonResponse
     {
-         $url = self::URL .'/' . $id;
-//        dd($url);
+        $url = self::URL .'/' . $id;
         $response = Http::get($url);
-//        dd(json_decode($response));
-        return json_decode($response);
-//        return $response;
-    }
-
-
-    public function fetch()
-    {
-        $response = Http::get('http://localhost:3000/hotels');
-        return json_decode($response->body());
+        return response()->json(['hotel' => json_decode($response)]);
     }
 
 }
