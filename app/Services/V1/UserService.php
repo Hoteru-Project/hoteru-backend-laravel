@@ -23,6 +23,11 @@ class UserService
         $this->userRepository=$userRepository;
     }
 
+    /**
+     * Registering New User
+     * @param $data
+     * @return mixed
+     */
     public function createUser($data){
         return $this->userRepository->save($data);
     }

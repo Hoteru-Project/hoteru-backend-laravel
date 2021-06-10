@@ -15,8 +15,8 @@ use App\Http\Controllers\Api\V1\Auth;
 |
 */
 
-Route::prefix('v1')->group(function () {
-    Route::middleware('api')->prefix('auth')->group(function () {
+Route::middleware('api')->prefix('v1')->group(function () {
+    Route::prefix('auth')->group(function () {
         Route::post('login', [Auth\LoginController::class, 'login']);
         Route::post('register', [Auth\RegisterController::class, 'register']);
         Route::post('logout', [Auth\LogoutController::class, 'logout']);

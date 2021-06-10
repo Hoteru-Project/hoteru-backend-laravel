@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 
 class RegisterController extends AuthController
 {
-    private $userService;
+    private UserService $userService;
 
     public function __construct(UserService $userService)
     {
