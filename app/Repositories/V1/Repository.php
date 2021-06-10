@@ -4,20 +4,21 @@ namespace App\Repositories\V1;
 
 
 use App\Contracts\V1\RepositoryContract;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Layer to handle datastore operations. Can be a local operation or external datastore
  */
 abstract class Repository implements RepositoryContract
 {
-    protected $model;
+    protected Model $model;
 
     public function getById($id)
     {
         return $this->model->find($id);
     }
 
-    public function update($data, $id)
+    public function update($id, $data)
     {
         $user = $this->getById($id);
         $user->update($data);

@@ -18,7 +18,7 @@ interface RepositoryContract
      * @param $data
      * @param $id numeric
      */
-    public function update($data, $id);
+    public function update($id, $data);
 
     /**
      * Save instance in datasource.
