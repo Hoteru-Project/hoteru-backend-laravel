@@ -14,6 +14,7 @@ class SearchService
     protected string $url;
     protected Response $response;
     protected mixed $decoded_json;
+    protected string $apiParams;
 
     function __construct($query)
     {
@@ -44,12 +45,18 @@ class SearchService
 
     private function setUrl($query)
     {
-        $this->url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=" . $query . "&inputtype=textquery&fields=geometry,name&language=en&key=" . $this->key;
+        $this->url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=" . $query .
+                     "&inputtype=textquery&fields=geometry,name&language=en&key=" . $this->key;
     }
+
+    private function setApiParams($checkIn, $checkOut, $latitude, $longitude, $rooms){
+        $this->apiParams = "checkIn=".$checkIn. "&checkOut=".$checkOut.
+                           "&lat=".$latitude. "&long=".$longitude."&rooms=".$rooms;
+    }
+
     private function checkResponseStatus($decoded_json){
         if($this->decoded_json->status == "ZERO_RESULTS"){
             dd("no results response from search service");
-//            dd($this->decoded_json);
         }
     }
 }
