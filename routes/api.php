@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\Auth;
+use App\Http\Controllers\APIFormaterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,7 +15,7 @@ use App\Http\Controllers\Api\V1\Auth;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+//api/V1/...
 Route::prefix('v1')->group(function () {
     Route::middleware('api')->prefix('auth')->group(function () {
         Route::post('login', [Auth\LoginController::class, 'login']);
@@ -23,5 +24,7 @@ Route::prefix('v1')->group(function () {
         Route::post('refresh', [Auth\RefreshTokenController::class, 'refresh']);
         Route::post('me', [Auth\LoginController::class, 'me']);
     });
+    Route::prefix('hotels')->group(function () {
+        Route::get('/', [APIFormaterController::class, 'index']);
+    });
 });
-
