@@ -13,7 +13,7 @@ class SearchService
     protected string $query;
     protected string $url;
     protected Response $response;
-    protected $decoded_json;
+    protected Object $decoded_json;
     protected string $apiParams;
 
     function __construct($query)
@@ -55,7 +55,7 @@ class SearchService
     }
 
     private function checkResponseStatus($decoded_json){
-        if($this->decoded_json->status == "ZERO_RESULTS"){
+        if($decoded_json == "ZERO_RESULTS"){
             dd("no results response from search service");
         }
     }
