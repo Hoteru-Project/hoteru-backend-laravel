@@ -2,37 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use Facade\FlareClient\Http\Client as HttpClient;
-use GuzzleHttp\Promise\Promise;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Client as GuzzleHttpClient;
-use GuzzleHttp\Psr7\Response;
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use App\Services\V1\FormaterService;
-use Illuminate\Http\JsonResponse;
 
 class APIFormaterController extends Controller
 {
     protected FormaterService $formaterService;
 
-    function __construct(FormaterService $formaterService)
+    function __construct()
     {
-        $this->formaterService = $formaterService;
+        $baseUrl = "http://localhost:8080";
+        $providers = ["hotels.com", "booking.com", "trip.com"];
+        $params = "checkIn=2021-06-07&checkOut=2021-06-08&lat=-33.8599358&long=151.2090295&rooms=1";
+        $this->formaterService = new FormaterService($baseUrl, $providers, $params);
     }
 
     function index()
     {
-        $client = new GuzzleHttpClient();
-        $promise = $client->requestAsync("GET", "http://localhost:3000/hotel");
-        $promise->then(function (JsonResponse $response) {
-            return json_decode($response->getBody());
-        });
-        $x = $promise->wait();
-        // $res = $this->formaterService->getAPI();
-        // // dd("cont");
-        // // dd($res);
-        dd($x);
+
+        $res = $this->formaterService->getAPI();
+
+        return  $res;
     }
 }

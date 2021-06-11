@@ -2,79 +2,74 @@
 
 namespace App\Services\V1;
 
-use Facade\FlareClient\Http\Client as HttpClient;
-use GuzzleHttp\Promise\Promise;
-use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise;
 use GuzzleHttp\Client as GuzzleHttpClient;
-
-use GuzzleHttp\Psr7\Response;
-
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Http;
-use GuzzleHttp\Promise\Client;
-// use Illuminate\Http\Client\Response;
 
 class FormaterService
 {
-    private $client;
-    private $handleResult;
-    // private Promise $promise;
-    private $data1;
-    private $data2;
-    private $data3;
-    private $allData = array();
 
+    private $baseUrl;
+    private $providers;
+    private $params;
+    private $api_token;
+
+
+    function __construct($baseUrl, $providers, $params)
+    {
+        $this->api_token = env("API_TOKEN");
+        $this->baseUrl = $baseUrl;
+        $this->providers = $providers;
+        $this->params = $params;
+    }
 
     function getAPI()
     {
-        // $client = new GuzzleHttpClient();
-        // $promise = $client->requestAsync("GET", "http://localhost:3000/hotel");
-        // $promise->then(function (Response $response) {
-        //     return $response->getBody();
-        // })->wait();
-        // // $promise->wait();
-        // // $promise->then(
-        // //     // $onFulfilled
-        // //     function ($value) {
-        // //         echo 'The promise was fulfilled.';
-        // //     },
-        // //     // $onRejected
-        // //     function ($reason) {
-        // //         echo 'The promise was rejected.';
-        // //     }
-        // // );
-        $url = "http://localhost:3000/hotel";
-        $this->promise = Http::async()->get($url)->then(
-            fn (Response $result) => $this->handleResult = $result
-        );
-        return $this->promise;
+        // getting Data From Different APIs
+        $client = new GuzzleHttpClient(['base_uri' => $this->baseUrl]);
+
+        // get all promises requests from providers
+        $promises = $this->getPromises($this->providers, $client);
+
+        // Wait Async Request to Respond
+        $responses = Promise\Utils::settle($promises)->wait();
+
+        // Accessing body from Responses
+        $responsesBodyArr = $this->getResponsesBody($responses);
+
+        // convert strings To Json Arrays & Merge Them into One Array
+        $jsonArrays = $this->getJsonArrays($responsesBodyArr);
+
+        return $jsonArrays;
     }
 
-
-    function getData()
+    private function getPromises($providers, $client)
     {
-        $res1 = Http::get("http://localhost:3000/hotel");
-        $res1 = response()->json(["hotels" => json_decode($res1)]);
-
-        return $res1;
+        $i = 1;
+        $totalPromises = [];
+        foreach ($providers as $provider) {
+            $totalPromises["res" . $i] = $client->getAsync("api/" . $provider . "?" . $this->params, ['headers' => ["authorization" => $this->api_token]]);
+            $i++;
+        }
+        return $totalPromises;
     }
 
+    private function getResponsesBody($responses)
+    {
+        $responsesBody = [];
+        $i = 1;
+        foreach ($responses as $response) {
+            $responsesBody["res" . $i] = $response["value"]->getBody()->getContents();
+            $i++;
+        }
+        return $responsesBody;
+    }
 
-
-
-
-
-
-
-    // function getData()
-    // {
-    //     $res1 = Http::get("http://localhost:3000/hotel");
-    //     $res2 = Http::get("http://localhost:3000/hotel");
-    //     $res3 = Http::get("http://localhost:3000/hotel");
-    //     $this->data1 = response()->json(["hotels" => json_decode($res1)]);
-    //     $this->data2 = response()->json(["hotels" => json_decode($res2)]);
-    //     $this->data3 = response()->json(["hotels" => json_decode($res3)]);
-
-    //     return $this->data1;
-    // }
+    private function getJsonArrays($responses)
+    {
+        $jsonArrays = array();
+        foreach ($responses as $response) {
+            array_push($jsonArrays, json_decode($response)->data[0]);
+        }
+        return $jsonArrays;
+    }
 }
