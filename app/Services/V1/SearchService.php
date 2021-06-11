@@ -22,7 +22,7 @@ class SearchService
         $this->setUrl($query);
         $this->response = Http::get($this->url);
         $this->decoded_json = json_decode($this->response);
-        $this->checkResponseStatus($this->decoded_json->status);
+        $this->checkResponseStatus($this->decoded_json);
 
     }
 
@@ -55,7 +55,7 @@ class SearchService
     }
 
     private function checkResponseStatus($decoded_json){
-        if($decoded_json == "ZERO_RESULTS"){
+        if($decoded_json->status == "ZERO_RESULTS"){
             dd("no results response from search service");
         }
     }
