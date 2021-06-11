@@ -56,9 +56,12 @@ class FormaterService
     private function getResponsesBody($responses)
     {
         $responsesBody = [];
-        $i = 1;
+        $i = $k = 1;
         foreach ($responses as $response) {
-            $responsesBody["res" . $i] = $response["value"]->getBody()->getContents();
+            foreach (json_decode($response["value"]->getBody())->data as $hotel){
+                $responsesBody["hotel_" . $k] = $hotel;
+                $k++;
+            }
             $i++;
         }
         return $responsesBody;
@@ -68,7 +71,7 @@ class FormaterService
     {
         $jsonArrays = array();
         foreach ($responses as $response) {
-            array_push($jsonArrays, json_decode($response)->data[0]);
+            array_push($jsonArrays, $response);
         }
         return $jsonArrays;
     }
