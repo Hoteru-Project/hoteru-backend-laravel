@@ -13,7 +13,7 @@ class SearchService
     protected string $query;
     protected string $url;
     protected Response $response;
-    protected mixed $decoded_json;
+    protected $decoded_json;
     protected string $apiParams;
 
     function __construct($query)
