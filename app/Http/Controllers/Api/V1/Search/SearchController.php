@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Search;
 
 use App\Services\V1\FormaterService;
 use App\Services\V1\SearchService;
+use App\Services\V1\FilterService;
 use App\Http\Controllers\Controller;
 use HttpRequest;
 use Illuminate\Http\JsonResponse;
