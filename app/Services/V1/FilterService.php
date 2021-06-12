@@ -15,7 +15,6 @@ class FilterService implements Filter {
     }
 
     public function filterHotels($filterParams) {
-
         for ($i = 0; $i < count($this->receivedHotels); $i++) {
             if ($this->checkRequiredFilter($this->ignoreCase($this->receivedHotels[$i]->mainAmenities), $filterParams)) {
                 array_push($this->filteredHotels, $this->receivedHotels[$i]);
@@ -39,8 +38,22 @@ class FilterService implements Filter {
         return $filterParams;
     }
 
+    public function sortFilteredHotels($filteredHotels) {
+
+        for($i=0;$i<count($filteredHotels);$i++){
+            $val = $filteredHotels[$i]->hotelPricing->startingAt->plain;
+            $j = $i-1;
+            while($j>=0 && $filteredHotels[$j]->hotelPricing->startingAt->plain > $val){
+                $filteredHotels[$j+1]->hotelPricing->startingAt->plain = $filteredHotels[$j]->hotelPricing->startingAt->plain;
+                $j--;
+            }
+            $filteredHotels[$j+1]->hotelPricing->startingAt->plain = $val;
+        }
+        return $filteredHotels;
+    }
+
     public function getFilteredHotels() {
-        return $this->filteredHotels;
+        return $this->sortFilteredHotels($this->filteredHotels);
     }
 
     // Test URLs => {
