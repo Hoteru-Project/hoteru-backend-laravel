@@ -16,17 +16,18 @@ class FilterService implements Filter {
 
     public function filterHotels($filterParams) {
         for ($i = 0; $i < count($this->receivedHotels); $i++) {
-            if ($this->checkRequiredFilter($this->ignoreCase($this->receivedHotels[$i]->mainAmenities), $filterParams)) {
+            if ($this->checkRequiredFilter( $filterParams,$this->ignoreCase($this->receivedHotels[$i]->mainAmenities))) {
                 array_push($this->filteredHotels, $this->receivedHotels[$i]);
             }
         }
     }
 
-    public function checkRequiredFilter($filteringFeatures, $filterParams) {
-        $filterParams = explode('&', $filterParams);
-        $filterParams =$this->ignoreCase($filterParams);
-        if (!empty(array_intersect($filteringFeatures, $filterParams))) return true;
-        return false;
+
+    public function checkRequiredFilter($filterParams,$filteringFeatures) {
+        $subSetArray    = $this->ignoreCase(explode('&', $filterParams));
+        $srcArray   = $filteringFeatures;
+        $isSubset   = array_diff($subSetArray,$srcArray);
+        return !$isSubset;
     }
 
     public function ignoreCase($filterParams) {
@@ -37,6 +38,7 @@ class FilterService implements Filter {
         }
         return $filterParams;
     }
+
 
     public function sortFilteredHotels($filteredHotels) {
 
