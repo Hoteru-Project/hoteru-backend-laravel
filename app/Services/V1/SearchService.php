@@ -14,6 +14,8 @@ class SearchService
     protected string $baseUrl;
     protected array $providers;
     protected FormatterService $formatterService;
+    private Object $decoded_json;
+    private string $apiParams;
 
     function __construct(FormatterService $formatterService)
     {
@@ -46,11 +48,6 @@ class SearchService
     public function getLongitude(): string
     {
         return $this->decoded_json->candidates[0]->geometry->location->lng;
-    }
-
-    public function getResponse(): Response
-    {
-        return $this->response;
     }
 
     private function setUrl($location)
