@@ -10,15 +10,9 @@ use \Illuminate\Http\Client\Response;
 class SearchService
 {
     protected string $key;
-    protected string $query;
     protected string $url;
-    protected Response $response;
-    protected object $decoded_json;
-    protected string $apiParams;
     protected string $baseUrl;
     protected array $providers;
-    protected string $latitude;
-    protected string $longitude;
     protected FormatterService $formatterService;
 
     function __construct(FormatterService $formatterService)
@@ -69,7 +63,6 @@ class SearchService
     {
         $this->apiParams = "checkIn=" . $checkIn . "&checkOut=" . $checkOut .
             "&lat=" . $latitude . "&long=" . $longitude . "&rooms=" . $rooms;
-//        dd($this->apiParams);
     }
 
     private function checkResponseStatus($decoded_json)
