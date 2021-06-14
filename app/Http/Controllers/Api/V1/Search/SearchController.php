@@ -21,10 +21,10 @@ class SearchController extends Controller
         $this->searchService = $searchService;
     }
 
-    public function index(): JsonResponse
+    public function index(Request $request)
     {
-
-
+        $hotels = $this->searchService->getHotels($request->query());
+        return $hotels;
     }
 
     public function searchQuery(string $searchQuery)
