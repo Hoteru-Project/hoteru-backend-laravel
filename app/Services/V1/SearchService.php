@@ -10,52 +10,61 @@ use \Illuminate\Http\Client\Response;
 class SearchService
 {
     protected string $key;
-    protected string $query;
     protected string $url;
-    protected Response $response;
-    protected $decoded_json;
-    protected string $apiParams;
+    protected string $baseUrl;
+    protected array $providers;
+    protected FormatterService $formatterService;
+    private Object $decoded_json;
+    private string $apiParams;
 
-    function __construct($query)
+    function __construct(FormatterService $formatterService)
     {
+        $this->formatterService = $formatterService;
         $this->key = env("GOOGLE_KEY");
-        $this->setUrl($query);
-        $this->response = Http::get($this->url);
-        $this->decoded_json = json_decode($this->response);
-        $this->checkResponseStatus($this->decoded_json->status);
-
+        $this->providers = explode(',', env("API_PROVIDERS"));
+        $this->baseUrl = env("API_URL");
     }
 
-    public function getLatitude()
+    public function getHotels($query): array
     {
-        $latitude = $this->decoded_json->candidates[0]->geometry->location->lat;
-        return $latitude;
+        $this->setUrl($query["location"]);
+        $this->decoded_json = json_decode(Http::get($this->url));
+        $this->setApiParams($query["checkIn"], $query["checkOut"],
+                            $this->getLatitude(), $this->getLongitude(), $query["rooms"]);
+
+        $this->formatterService->setParams($this->baseUrl, $this->providers, $this->apiParams);
+        $hotels["result"] = $this->formatterService->getAPI();
+//        if (empty($hotels["result"])) {
+//            $hotels["result"] = "no hotels found";
+//        }
+        return $hotels;
     }
 
-    public function getLongitude()
+    public function getLatitude(): string
     {
-        $longitude = $this->decoded_json->candidates[0]->geometry->location->lng;
-        return $longitude;
+        return $this->decoded_json->candidates[0]->geometry->location->lat;
     }
 
-    public function getResponse(): Response
+    public function getLongitude(): string
     {
-        return $this->response;
+        return $this->decoded_json->candidates[0]->geometry->location->lng;
     }
 
-    private function setUrl($query)
+    private function setUrl($location)
     {
-        $this->url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=" . $query .
-                     "&inputtype=textquery&fields=geometry,name&language=en&key=" . $this->key;
+        $this->url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=" . $location .
+            "&inputtype=textquery&fields=geometry,name&language=en&key=" . $this->key;
     }
 
-    private function setApiParams($checkIn, $checkOut, $latitude, $longitude, $rooms){
-        $this->apiParams = "checkIn=".$checkIn. "&checkOut=".$checkOut.
-                           "&lat=".$latitude. "&long=".$longitude."&rooms=".$rooms;
+    private function setApiParams($checkIn, $checkOut, $latitude, $longitude, $rooms)
+    {
+        $this->apiParams = "checkIn=" . $checkIn . "&checkOut=" . $checkOut .
+            "&lat=" . $latitude . "&long=" . $longitude . "&rooms=" . $rooms;
     }
 
-    private function checkResponseStatus($decoded_json){
-        if($this->decoded_json->status == "ZERO_RESULTS"){
+    private function checkResponseStatus($decoded_json)
+    {
+        if ($decoded_json->status != "OK") {
             dd("no results response from search service");
         }
     }
