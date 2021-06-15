@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Auth;
 
 use App\Http\Requests\Api\V1\Auth\RegisterRequest;
 use App\Services\V1\UserService;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 
 class RegisterController extends AuthController
@@ -19,6 +20,7 @@ class RegisterController extends AuthController
     public function register(RegisterRequest $registerRequest): JsonResponse
     {
         $user = $this->userService->createUser($registerRequest->validated());
+        event(new Registered($user));
         return response()->json($user, 201);
     }
 }
