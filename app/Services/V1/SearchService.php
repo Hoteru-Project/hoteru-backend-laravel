@@ -62,6 +62,23 @@ class SearchService
             "&lat=" . $latitude . "&long=" . $longitude . "&rooms=" . $rooms;
     }
 
+    public function getApiParams() {
+        return $this->apiParams;
+    }
+
+    public function getFilterParams() {
+        $url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $queryStr = parse_url($url, PHP_URL_QUERY);
+        parse_str($queryStr, $queryParams);
+        array_key_exists('filter',$queryParams) ? $searchParams = $queryParams['filter'] : $searchParams = "";
+        return $searchParams;
+    }
+
+    public function isFilterApplied(){
+        return !empty($this->getFilterParams());
+    }
+
+
     private function checkResponseStatus($decoded_json)
     {
         if ($decoded_json->status != "OK") {

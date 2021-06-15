@@ -4,8 +4,11 @@
 namespace App\Services\V1;
 
 
+
+
 class FilterService implements Filter {
 
+    protected  SearchService $searchService;
     protected $receivedHotels;
     protected $filteredHotels = [];
 
@@ -23,7 +26,7 @@ class FilterService implements Filter {
 
 
     public function checkRequiredFilter($filterParams,$filteringFeatures) {
-        $subSetArray    = $this->ignoreCase(explode('&', $filterParams));
+        $subSetArray    = $this->ignoreCase(explode('-', $filterParams));
         $srcArray   = $filteringFeatures;
         $isSubset   = array_diff($subSetArray,$srcArray);
         return !$isSubset;
@@ -58,10 +61,9 @@ class FilterService implements Filter {
     }
 
     // Test URLs => {
-    //    http://127.0.0.1:8001/api/v1/hotels/alexandria/filter=POOL
-    //    http://127.0.0.1:8001/api/v1/hotels/alexandria/filter=pool&WIFI
-    //    http://127.0.0.1:8001/api/v1/hotels/alexandria/filter=pool
-    //    http://127.0.0.1:8001/api/v1/hotels?checkIn=2021-06-07&checkOut=2021-06-08&location=alexandria&rooms=1/filter=pool&wifi
+    //      http://127.0.0.1:8001/api/v1/hotels/search?checkIn=2021-06-07&checkOut=2021-06-08&location=alexandria&rooms=1
+    //      http://127.0.0.1:8001/api/v1/hotels/search?checkIn=2021-06-07&checkOut=2021-06-08&location=alexandria&rooms=1&filter=pool-wrong
+    //      http://127.0.0.1:8001/api/v1/hotels/search?checkIn=2021-06-07&checkOut=2021-06-08&location=alexandria&rooms=1&filter=pool-wifi
     //    }
 }
 

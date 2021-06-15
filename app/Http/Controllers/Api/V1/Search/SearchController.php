@@ -12,20 +12,34 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
+
 class SearchController extends Controller
 {
     protected SearchService $searchService;
     protected FormatterService $formatterService;
+    protected FilterService $filterService;
 
     function __construct(SearchService $searchService)
     {
         $this->searchService = $searchService;
     }
 
-    public function index(Request $request)
-    {
+
+    public function index(Request $request) {
         $hotels = $this->searchService->getHotels($request->query());
+
+        if($this->searchService->isFilterApplied()) {
+            return !$this->filterHotels($hotels) ? "These filters didn't match our database :(" : $this->filterHotels($hotels) ;
+        }
+
         return $hotels;
+    }
+
+    public function filterHotels ($hotels) {
+        $filteredHotels = new FilterService($hotels);
+        $filterParams = $this->searchService->getFilterParams();
+        $filteredHotels->filterHotels($filterParams);
+        return $filteredHotels->getFilteredHotels();
     }
 
     public function searchQuery(string $searchQuery)
