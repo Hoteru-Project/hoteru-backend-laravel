@@ -30,9 +30,12 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::prefix('hotels')->group(function () {
-        Route::get('/', [SearchController::class, 'index']);
-        Route::get('/{searchQuery}', [SearchController::class, 'searchQuery']);
-        Route::get('/{cityName}/filter={filterParams}', [FilterController::class, 'filter']);
+//        dd("string");
+//        Route::get('/', [SearchController::class, 'index']);
+//        Route::get('/{searchQuery}', [SearchController::class, 'searchQuery']);
+//        Route::get('{searchQuery}/filter={filterParams}', [FilterController::class, 'filter']);
+        Route::get('filter={filterParams}/search', [FilterController::class, 'filter']);
+//        Route::get('test', [FilterController::class, 'test']);
 
     });
 

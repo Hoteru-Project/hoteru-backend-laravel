@@ -9,9 +9,8 @@ class FilterService implements Filter {
     protected $receivedHotels;
     protected $filteredHotels = [];
 
-    function __construct($hotels, $cityName) {
-        $this->receivedHotels = $hotels;
-        $this->cityName = $cityName;
+    function __construct($hotels) {
+        $this->receivedHotels = $hotels["result"];
     }
 
     public function filterHotels($filterParams) {
@@ -62,7 +61,7 @@ class FilterService implements Filter {
     //    http://127.0.0.1:8001/api/v1/hotels/alexandria/filter=POOL
     //    http://127.0.0.1:8001/api/v1/hotels/alexandria/filter=pool&WIFI
     //    http://127.0.0.1:8001/api/v1/hotels/alexandria/filter=pool
-    //    http://127.0.0.1:8001/api/v1/hotels/alexandria/filter=pool&wifi
+    //    http://127.0.0.1:8001/api/v1/hotels?checkIn=2021-06-07&checkOut=2021-06-08&location=alexandria&rooms=1/filter=pool&wifi
     //    }
 }
 
