@@ -25,7 +25,8 @@ class FilterService implements Filter {
     }
 
 
-    public function checkRequiredFilter($filterParams,$filteringFeatures) {
+    public function checkRequiredFilter($filterParams,$filteringFeatures): bool
+    {
         $subSetArray    = $this->ignoreCase(explode('-', $filterParams));
         $srcArray   = $filteringFeatures;
         $isSubset   = array_diff($subSetArray,$srcArray);
@@ -42,22 +43,8 @@ class FilterService implements Filter {
     }
 
 
-    public function sortFilteredHotels($filteredHotels) {
-
-        for($i=0;$i<count($filteredHotels);$i++){
-            $val = $filteredHotels[$i]->hotelPricing->startingAt->plain;
-            $j = $i-1;
-            while($j>=0 && $filteredHotels[$j]->hotelPricing->startingAt->plain > $val){
-                $filteredHotels[$j+1]->hotelPricing->startingAt->plain = $filteredHotels[$j]->hotelPricing->startingAt->plain;
-                $j--;
-            }
-            $filteredHotels[$j+1]->hotelPricing->startingAt->plain = $val;
-        }
-        return $filteredHotels;
-    }
-
-    public function getFilteredHotels() {
-        return $this->sortFilteredHotels($this->filteredHotels);
+    public function getFilteredHotels(): array {
+        return $this->filteredHotels;
     }
 
     // Test URLs => {

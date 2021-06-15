@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\V1\Search;
 use App\Services\V1\FormatterService;
 use App\Services\V1\SearchService;
 use App\Services\V1\FilterService;
+use App\Services\V1\SortingService;
+
 use App\Http\Controllers\Controller;
 use HttpRequest;
 use Illuminate\Http\JsonResponse;
@@ -18,6 +20,7 @@ class SearchController extends Controller
     protected SearchService $searchService;
     protected FormatterService $formatterService;
     protected FilterService $filterService;
+    protected SortingService $sortingService;
 
     function __construct(SearchService $searchService)
     {
@@ -32,14 +35,24 @@ class SearchController extends Controller
             return !$this->filterHotels($hotels) ? "These filters didn't match our database :(" : $this->filterHotels($hotels) ;
         }
 
+        if($this->searchService->isSortingApplied()) {
+            return $this->sortHotels($hotels);
+        }
+
         return $hotels;
     }
 
     public function filterHotels ($hotels) {
         $filteredHotels = new FilterService($hotels);
-        $filterParams = $this->searchService->getFilterParams();
+        $filterParams = $this->searchService->getUrlServices('filter');
         $filteredHotels->filterHotels($filterParams);
         return $filteredHotels->getFilteredHotels();
+    }
+
+    public function sortHotels($hotels) {
+        $sortingID = $this->searchService->getUrlServices('sorting');
+        $sortedHotels = new SortingService($hotels,$sortingID);
+        return $sortedHotels->sortSentHotels($sortingID);
     }
 
     public function searchQuery(string $searchQuery)

@@ -66,16 +66,23 @@ class SearchService
         return $this->apiParams;
     }
 
-    public function getFilterParams() {
+    // a generic function that checks if a sorting or a filtering service is required
+    public function getUrlServices($requestedService):string {
         $url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         $queryStr = parse_url($url, PHP_URL_QUERY);
         parse_str($queryStr, $queryParams);
-        array_key_exists('filter',$queryParams) ? $searchParams = $queryParams['filter'] : $searchParams = "";
-        return $searchParams;
+        array_key_exists($requestedService,$queryParams) ? $serviceParams = $queryParams[$requestedService] : $serviceParams = "";
+        return $serviceParams;
     }
 
-    public function isFilterApplied(){
-        return !empty($this->getFilterParams());
+    public function isFilterApplied(): bool {
+        $requestedService = 'filter';
+        return !empty($this->getUrlServices($requestedService));
+    }
+
+    public function isSortingApplied(): bool {
+        $requestedService = 'sorting';
+        return !empty($this->getUrlServices($requestedService));
     }
 
 
