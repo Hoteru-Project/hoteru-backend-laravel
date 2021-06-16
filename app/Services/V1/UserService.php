@@ -4,6 +4,8 @@ namespace App\Services\V1;
 
 use App\Models\User;
 use App\Repositories\V1\UserRepository;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Password;
 
 class UserService
@@ -32,12 +34,14 @@ class UserService
      */
     public function createUser($data): User|null
     {
-        return $this->userRepository->save($data);
+        $user =  $this->userRepository->save($data);
+        event(new Registered($user));
+        return $user;
     }
 
     public function requestResetPasswordToken($data): bool
     {
-        $status = Password::sendResetLink([$data["email"]]);
+        $status = Password::sendResetLink(["email" => $data["email"]]);
         return $status === Password::RESET_LINK_SENT;
     }
 
@@ -49,6 +53,19 @@ class UserService
                 $this->userRepository->update($user->id, ["password" => $password]);
             });
         return $status === Password::PASSWORD_RESET;
+    }
+
+    public function verify($data): bool
+    {
+        $user = $this->userRepository->getById($data["id"]);
+
+        if (!hash_equals((string) $data["hash"], sha1($user->getEmailForVerification()))) {
+            return false;
+        }
+
+        if ($user->markEmailAsVerified())
+            event(new Verified($user));
+        return true;
     }
 
     public function resendEmailVerificationNotification($data): bool

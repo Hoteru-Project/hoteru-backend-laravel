@@ -7,13 +7,14 @@ use App\Http\Requests\Api\V1\Auth\RequestResetPasswordRequest;
 use App\Http\Requests\Api\V1\Auth\UpdateResetPasswordRequest;
 use App\Services\V1\UserService;
 
-class ResetPasswordController extends Controller
+class ResetPasswordController extends AuthController
 {
 
     private UserService $userService;
 
     public function __construct(UserService $userService)
     {
+        parent::__construct();
         $this->userService = $userService;
     }
 
