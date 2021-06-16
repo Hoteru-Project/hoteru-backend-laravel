@@ -15,7 +15,7 @@ abstract class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register', 'verify', 'send', "email", "update"]]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'verify', "email", "update"]]);
     }
 
     /**

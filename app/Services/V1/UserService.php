@@ -4,6 +4,7 @@ namespace App\Services\V1;
 
 use App\Models\User;
 use App\Repositories\V1\UserRepository;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Password;
@@ -34,7 +35,7 @@ class UserService
      */
     public function createUser($data): User|null
     {
-        $user =  $this->userRepository->save($data);
+        $user = $this->userRepository->save($data);
         event(new Registered($user));
         return $user;
     }
@@ -45,13 +46,12 @@ class UserService
         return $status === Password::RESET_LINK_SENT;
     }
 
-    public function updateUserPassword($data): bool
+    public function updateUserPassword($data)
     {
-        $status = Password::reset(
-            [$data["email"], $data["password"], $data["password"], $data["token"]],
-            function ($user, $password) {
-                $this->userRepository->update($user->id, ["password" => $password]);
-            });
+        $status = Password::reset($data, function ($user, $password) {
+            $this->userRepository->update($user->id, ["password" => $password]);
+            event(new PasswordReset($user));
+        });
         return $status === Password::PASSWORD_RESET;
     }
 
@@ -59,7 +59,7 @@ class UserService
     {
         $user = $this->userRepository->getById($data["id"]);
 
-        if (!hash_equals((string) $data["hash"], sha1($user->getEmailForVerification()))) {
+        if (!hash_equals((string)$data["hash"], sha1($user->getEmailForVerification()))) {
             return false;
         }
 
