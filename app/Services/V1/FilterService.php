@@ -13,7 +13,7 @@ class FilterService implements Filter {
     protected array $filteredHotels = [];
 
     function __construct($hotels) {
-        $this->receivedHotels = $hotels["result"];
+        $this->receivedHotels = $hotels;
     }
 
     public function filterHotels($filterParams) {

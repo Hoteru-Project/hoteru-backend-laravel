@@ -32,11 +32,11 @@ class SearchController extends Controller
         $hotels = $this->searchService->getHotels($request->query());
 
         if($this->searchService->isFilterApplied()) {
-            return !$this->filterHotels($hotels) ? "These filters didn't match our database :(" : $this->filterHotels($hotels) ;
+            $hotels = $this->filterHotels($hotels);
         }
 
         if($this->searchService->isSortingApplied()) {
-            return $this->sortHotels($hotels);
+            $hotels = $this->sortHotels($hotels);
         }
 
         return $hotels;

@@ -13,7 +13,7 @@ class SortingService {
     protected array $receivedHotels;
 
     function __construct($hotels,$sortingID) {
-        $this->receivedHotels = $hotels["result"];
+        $this->receivedHotels = $hotels;
 //        switch ($sortId) {
 //            case 1:
 //                sorting by price;
