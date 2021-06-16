@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Notifications\Auth\ResetPasswordNotification;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -9,7 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject, CanResetPassword, MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
@@ -43,7 +46,8 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
-    public function setPasswordAttribute($value){
+    public function setPasswordAttribute($value)
+    {
         $this->attributes['password'] = Hash::make($value);
     }
 
@@ -67,5 +71,11 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims(): array
     {
         return [];
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $url = env("APP_FRONTEND_URL")."/auth/reset-password?token=$token";
+        $this->notify(new ResetPasswordNotification($url));
     }
 }

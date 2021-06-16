@@ -19,4 +19,9 @@ class UserRepository extends Repository
         $this->model = $user;
     }
 
+    public function getByEmail($email): User|null
+    {
+        return $this->model->where(["email" => $email])->first();
+    }
+
 }
