@@ -75,13 +75,11 @@ class SearchService
     }
 
     public function isFilterApplied(): bool {
-        $requestedService = 'filter';
-        return !empty($this->getUrlServices($requestedService));
+        return !empty($this->getUrlServices('filter'));
     }
 
     public function isSortingApplied(): bool {
-        $requestedService = 'sorting';
-        return !empty($this->getUrlServices($requestedService));
+        return !empty($this->getUrlServices('sorting'));
     }
 
 

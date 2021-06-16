@@ -55,7 +55,7 @@ class SortingService {
         for($i=0;$i<count($hotels);$i++) {
             $val = $hotels[$i]->guestReviews->overallRating;
             $j = $i-1;
-            while($j>=0 && $hotels[$j]->guestReviews->overallRating > $val){
+            while($j>=0 && $hotels[$j]->guestReviews->overallRating < $val){
                 $hotels[$j+1]->guestReviews->overallRating = $hotels[$j]->guestReviews->overallRating;
                 $j--;
             }
