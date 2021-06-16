@@ -11,36 +11,57 @@ use Illuminate\Support\Facades\Request;
 
 class SortingService {
     protected array $receivedHotels;
+    protected int $sortingID;
 
-    function __construct($hotels,$sortingID) {
+    function __construct($hotels,$sentID) {
         $this->receivedHotels = $hotels;
-//        switch ($sortId) {
-//            case 1:
-//                sorting by price;
-//                break;
-//            case 2:
-//                sorting by rating;
-//                break;
-//            case 3:
-//                sorting by our recommendation
-//        }
+        $this->sortingID = $sentID;
     }
 
-    public function sortSentHotels($sortId) {
-        $hotels = $this->receivedHotels;
+
+    public function sortSentHotels() {
+        $sortMode = $this->sortingID;
+        $unSortedHotels = $this->receivedHotels;
+        $sortedHotels = [];
+        switch ($sortMode) {
+            case 1:
+                $sortedHotels = $this->sortByPricing($unSortedHotels);
+                break;
+            case 2:
+                $sortedHotels = $this->sortByRating($unSortedHotels);
+                break;
+            case 3:
+                break;
+        }
+        return $sortedHotels;
+    }
+
+    public function sortByPricing($hotels) {
 
         for($i=0;$i<count($hotels);$i++) {
-
             $val = $hotels[$i]->hotelPricing->startingAt->plain;
             $j = $i-1;
-
             while($j>=0 && $hotels[$j]->hotelPricing->startingAt->plain > $val){
                 $hotels[$j+1]->hotelPricing->startingAt->plain = $hotels[$j]->hotelPricing->startingAt->plain;
                 $j--;
             }
             $hotels[$j+1]->hotelPricing->startingAt->plain = $val;
         }
-
         return $hotels;
     }
+
+    public function sortByRating($hotels) {
+
+        for($i=0;$i<count($hotels);$i++) {
+            $val = $hotels[$i]->guestReviews->overallRating;
+            $j = $i-1;
+            while($j>=0 && $hotels[$j]->guestReviews->overallRating > $val){
+                $hotels[$j+1]->guestReviews->overallRating = $hotels[$j]->guestReviews->overallRating;
+                $j--;
+            }
+            $hotels[$j+1]->guestReviews->overallRating = $val;
+        }
+        return $hotels;
+    }
+
 }

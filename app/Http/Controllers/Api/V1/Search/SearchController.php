@@ -52,7 +52,7 @@ class SearchController extends Controller
     public function sortHotels($hotels) {
         $sortingID = $this->searchService->getUrlServices('sorting');
         $sortedHotels = new SortingService($hotels,$sortingID);
-        return $sortedHotels->sortSentHotels($sortingID);
+        return $sortedHotels->sortSentHotels();
     }
 
     public function searchQuery(string $searchQuery)
