@@ -10,29 +10,33 @@ class FilterService implements Filter {
 
     protected  SearchService $searchService;
     protected $receivedHotels;
-    protected $filteredHotels = [];
+    protected array $filteredHotels = [];
 
     function __construct($hotels) {
         $this->receivedHotels = $hotels["result"];
     }
 
     public function filterHotels($filterParams) {
-        for ($i = 0; $i < count($this->receivedHotels); $i++) {
-            if ($this->checkRequiredFilter( $filterParams,$this->ignoreCase($this->receivedHotels[$i]->mainAmenities))) {
-                array_push($this->filteredHotels, $this->receivedHotels[$i]);
+        $hotels = $this->receivedHotels;
+
+        // calls the ignore case function to compare the required filter and the existing hotels
+        foreach ($hotels as $hotel){$hotel->mainAmenities = $this->ignoreCase($hotel->mainAmenities);}
+        $filterParams= $this->ignoreCase( explode('-', $filterParams) );
+
+        // checks if the required filter in the url matches any of the existing features in the apis
+        foreach ($hotels as $hotel){
+            if ( $this->checkRequiredFilter( $filterParams,$hotel->mainAmenities) ) {
+                array_push($this->filteredHotels, $hotel);
             }
         }
     }
 
-
-    public function checkRequiredFilter($filterParams,$filteringFeatures): bool
-    {
-        $subSetArray    = $this->ignoreCase(explode('-', $filterParams));
-        $srcArray   = $filteringFeatures;
-        $isSubset   = array_diff($subSetArray,$srcArray);
-        return !$isSubset;
+    // returns a boolean value depending on if at least one required filter matches any existing hotels in the api
+    public function checkRequiredFilter($filterParams,$existingFeatures): bool {
+        return !array_diff($filterParams,$existingFeatures);
     }
 
+    // used in comparing on a case insensitive base
     public function ignoreCase($filterParams) {
         $j = 0;
         foreach( $filterParams as $element ) {
@@ -42,7 +46,7 @@ class FilterService implements Filter {
         return $filterParams;
     }
 
-
+    // returns hotels after filtration process
     public function getFilteredHotels(): array {
         return $this->filteredHotels;
     }
