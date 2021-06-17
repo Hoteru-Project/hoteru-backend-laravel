@@ -21,7 +21,4 @@ class CurrencyController extends Controller
         return response()->json($currencies,201);
     }
 
-    public function store (Request $request){
-
-    }
 }
