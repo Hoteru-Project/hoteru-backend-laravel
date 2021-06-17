@@ -15,7 +15,7 @@ abstract class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'verify', "email", "update"]]);
     }
 
     /**
@@ -32,7 +32,6 @@ abstract class AuthController extends Controller
      * Get the token array structure.
      *
      * @param string $token
-     *
      * @return JsonResponse
      */
     protected function respondWithToken(string $token): JsonResponse

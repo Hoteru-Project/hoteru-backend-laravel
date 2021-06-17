@@ -5,21 +5,30 @@ namespace App\Services\V1;
 use GuzzleHttp\Promise;
 use GuzzleHttp\Client as GuzzleHttpClient;
 
-class FormaterService
+class FormatterService
 {
 
-    private $baseUrl;
-    private $providers;
-    private $params;
-    private $api_token;
+    private string $baseUrl;
+    private array $providers;
+    private string $params;
+    private string $api_token;
 
 
-    function __construct($baseUrl, $providers, $params)
+//    function __construct($baseUrl, $providers, $params)
+//    {
+//        $this->api_token = env("API_TOKEN");
+//        $this->baseUrl = $baseUrl;
+//        $this->providers = $providers;
+//        $this->params = $params;
+//    }
+
+    public function setParams($baseUrl, $providers, $params)
     {
         $this->api_token = env("API_TOKEN");
         $this->baseUrl = $baseUrl;
         $this->providers = $providers;
         $this->params = $params;
+//        dd($baseUrl, $providers, $params);
     }
 
     function getAPI()
@@ -58,16 +67,18 @@ class FormaterService
         $responsesBody = [];
         $i = $k = 1;
         foreach ($responses as $response) {
-            foreach (json_decode($response["value"]->getBody())->data as $hotel){
-                $responsesBody["hotel_" . $k] = $hotel;
-                $k++;
+            if ($response["state"] == "fulfilled") {
+                foreach (json_decode($response["value"]->getBody())->data as $hotel) {
+                    $responsesBody["hotel_" . $k] = $hotel;
+                    $k++;
+                }
+                $i++;
             }
-            $i++;
         }
         return $responsesBody;
     }
 
-    private function getJsonArrays($responses)
+    private function getJsonArrays($responses): array
     {
         $jsonArrays = array();
         foreach ($responses as $response) {
