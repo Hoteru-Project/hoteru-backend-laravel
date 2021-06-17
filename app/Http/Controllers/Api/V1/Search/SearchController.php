@@ -6,7 +6,7 @@ use App\Services\V1\FormatterService;
 use App\Services\V1\SearchService;
 use App\Services\V1\FilterService;
 use App\Services\V1\SortingService;
-use App\Services\V1\UrlParsingService;
+
 
 use App\Http\Controllers\Controller;
 use HttpRequest;
@@ -22,39 +22,38 @@ class SearchController extends Controller
     protected FormatterService $formatterService;
     protected FilterService $filterService;
     protected SortingService $sortingService;
-    protected UrlParsingService $urlParsingService;
 
 
     function __construct(SearchService $searchService)
     {
         $this->searchService = $searchService;
-        $this->urlParsingService = new urlParsingService();
     }
 
 
     public function index(Request $request) {
+
         $hotels = $this->searchService->getHotels($request->query());
 
-        if($this->urlParsingService->isServiceRequired('filter')) {
-            $hotels = $this->filterHotels($hotels);
+        if($request->filter) {
+            $hotels = $this->filterHotels($request,$hotels);
         }
 
-        if($this->urlParsingService->isServiceRequired('sorting')) {
-            $hotels = $this->sortHotels($hotels);
+        if($request->sorting) {
+            $hotels = $this->sortHotels($request,$hotels);
         }
 
         return $hotels;
     }
 
-    public function filterHotels ($hotels): array {
+    public function filterHotels ($request,$hotels): array {
         $filteredHotels = new FilterService($hotels);
-        $filterParams = $this->urlParsingService->getServiceParams("filter");
+        $filterParams = $request->filter;
         $filteredHotels->filterHotels($filterParams);
         return $filteredHotels->getFilteredHotels();
     }
 
-    public function sortHotels($hotels) {
-        $sortingID = $this->urlParsingService->getServiceParams("sorting");
+    public function sortHotels($request,$hotels) {
+        $sortingID = $request->sorting;
         $sortedHotels = new SortingService($hotels,$sortingID);
         return $sortedHotels->sortSentHotels();
     }
