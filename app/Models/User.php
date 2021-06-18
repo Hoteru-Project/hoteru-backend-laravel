@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Notifications\Auth\ResetPasswordNotification;
-use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -75,7 +74,7 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword, Must
 
     public function sendPasswordResetNotification($token)
     {
-        $url = env("APP_FRONTEND_URL")."/auth/reset-password?token=$token";
+        $url = config("app.frontend_url")."/auth/reset-password?token=$token";
         $this->notify(new ResetPasswordNotification($url));
     }
 }
