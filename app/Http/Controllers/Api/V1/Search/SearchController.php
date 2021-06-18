@@ -35,26 +35,24 @@ class SearchController extends Controller
         $hotels = $this->searchService->getHotels($request->query());
 
         if($request->filter) {
-            $hotels = $this->filterHotels($request,$hotels);
+            $hotels = $this->filterHotels($request->filter,$hotels);
         }
 
         if($request->sorting) {
-            $hotels = $this->sortHotels($request,$hotels);
+            $hotels = $this->sortHotels($request->sorting,$hotels);
         }
 
         return $hotels;
     }
 
-    public function filterHotels ($request,$hotels): array {
+    public function filterHotels ($filterParam,$hotels): array {
         $filteredHotels = new FilterService($hotels);
-        $filterParams = $request->filter;
-        $filteredHotels->filterHotels($filterParams);
+        $filteredHotels->filterHotels($filterParam);
         return $filteredHotels->getFilteredHotels();
     }
 
-    public function sortHotels($request,$hotels) {
-        $sortingID = $request->sorting;
-        $sortedHotels = new SortingService($hotels,$sortingID);
+    public function sortHotels($sortID,$hotels) {
+        $sortedHotels = new SortingService($hotels,$sortID);
         return $sortedHotels->sortSentHotels();
     }
 
