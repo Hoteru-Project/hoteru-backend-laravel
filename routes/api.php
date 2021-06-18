@@ -34,7 +34,10 @@ Route::middleware('api')->prefix('v1')->group(function () {
 
     Route::prefix('hotels')->group(function () {
         Route::get('/{searchQuery}', [SearchController::class, 'index']);
+    });
 
+    Route::prefix('hotel')->group(function () {
+        Route::get('', [SearchController::class, 'getHotelByName']);
     });
 
     Route::prefix('formatter')->group(function () {
