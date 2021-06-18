@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\V1\Auth;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Auth\ResendEmailVerificationRequest;
 use App\Services\V1\UserService;
 use Illuminate\Http\JsonResponse;
@@ -17,7 +16,7 @@ class VerifyEmailController extends AuthController
     {
         parent::__construct();
         $this->userService = $userService;
-        $frontEndURL = env("FRONTEND_APP_URL", "http://localhost:3000");
+        $frontEndURL = config("app.frontend_url");
         $this->redirectTo = "$frontEndURL/login?verification=successful";
 
     }
