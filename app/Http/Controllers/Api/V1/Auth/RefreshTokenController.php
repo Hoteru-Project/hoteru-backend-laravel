@@ -13,6 +13,6 @@ class RefreshTokenController extends AuthController
      */
     public function refresh(): JsonResponse
     {
-        return $this->respondWithToken(auth()->refresh());
+        return $this->respondWithToken($this->guard()->refresh());
     }
 }

@@ -15,7 +15,7 @@ class LoginController extends AuthController
     {
         $credentials = request(['email', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
+        if (! $token = $this->guard()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
