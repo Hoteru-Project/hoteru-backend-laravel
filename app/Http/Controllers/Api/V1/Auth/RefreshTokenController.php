@@ -13,6 +13,6 @@ class RefreshTokenController extends AuthController
      */
     public function refresh(): JsonResponse
     {
-        return $this->respondWithToken($this->guard()->refresh());
+        return $this->respondWithToken($this->guard()->setTTL(60*24*7)->refresh(true, true));
     }
 }
