@@ -33,9 +33,6 @@ class SearchService
                             $this->getLatitude(), $this->getLongitude(), $query["rooms"]);
 
         $this->formatterService->setParams($this->baseUrl, $this->providers, $this->apiParams);
-        //        if (empty($hotels["result"])) {
-        //            $hotels["result"] = "no hotels found";
-        //        }
         return $this->formatterService->getAPI();
     }
 

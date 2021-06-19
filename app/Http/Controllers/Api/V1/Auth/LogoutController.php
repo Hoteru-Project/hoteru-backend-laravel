@@ -13,7 +13,7 @@ class LogoutController extends AuthController
      */
     public function logout(): JsonResponse
     {
-        auth()->logout();
+        $this->guard()->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
     }
