@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Currency;
 use Illuminate\Database\Seeder;
 use Tymon\Support\Facades\DB;
 
@@ -14,7 +15,7 @@ class CurrenciesTableSeeder extends Seeder
      */
     public function run()
     {
-        \DB::table('currencies')->insert([
+        Currency::insert([
             ['code' =>'AFN' , 'name' => 'Afghani', 'symbol' => '؋' ],
             ['code' =>'ALL' , 'name' => 'Lek', 'symbol' => 'Lek' ],
             ['code' =>'ANG' , 'name' => 'Netherlands Antillian Guilder', 'symbol' => 'ƒ' ],

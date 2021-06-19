@@ -19,4 +19,9 @@ class CurrencyRepository extends Repository
         $this->model = $currency;
     }
 
+
+    public function showCurrencies(){
+        return $this->model->all();
+    }
+
 }

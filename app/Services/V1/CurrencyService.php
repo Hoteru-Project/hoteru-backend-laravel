@@ -2,6 +2,7 @@
 
 namespace App\Services\V1;
 
+use App\Models\Currency;
 use App\Repositories\V1\CurrencyRepository;
 
 class CurrencyService
@@ -23,7 +24,9 @@ class CurrencyService
         $this->currencyRepository=$currencyRepository;
     }
 
-    public function createCurrency($data){
-        return $this->currencyRepository->save($data);
+    public function listCurrencies(){
+        return $this->currencyRepository->showCurrencies();
     }
+
+
 }

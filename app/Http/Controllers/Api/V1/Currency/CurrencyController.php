@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Currency;
 
+use App\Http\Controllers\Controller;
 use App\Models\Currency;
 use App\Services\V1\CurrencyService;
 use Illuminate\Http\Request;
@@ -12,12 +13,11 @@ class CurrencyController extends Controller
 
     public function __construct(CurrencyService $currencyService)
     {
-        parent::__construct();
-        $this->$currencyService = $currencyService;
+        $this->currencyService = $currencyService;
     }
 
     public function index (){
-        $currencies = Currency::all();
+        $currencies = $this->currencyService->listCurrencies();
         return response()->json($currencies,201);
     }
 
