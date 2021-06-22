@@ -19,6 +19,8 @@ class CreateSearchesTable extends Migration
             $table->enum("type", ["place", "hotel"]);
             $table->unsignedBigInteger("count");
             $table->timestamps();
+
+            $table->unique(["search", "type"]);
         });
     }
 
