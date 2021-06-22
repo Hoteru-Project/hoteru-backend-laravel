@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\User\UpdateUserRequest;
 use App\Services\V1\UserService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\User;
 
@@ -27,10 +26,8 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request)
     {
-        User::all();
-
-//        $user = $this->userService->updateUser(auth("api")->user()?->id, $request->validated());
-//        return response()->json(["success" => true, "data" => $user]);
+        $user = $this->userService->updateUser(auth("api")->user()?->id, $request->validated());
+        return response()->json(["success" => true, "data" => $user]);
     }
 
     /**
