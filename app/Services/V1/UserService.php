@@ -46,6 +46,10 @@ class UserService
         return $status === Password::RESET_LINK_SENT;
     }
 
+    public function updateUser($id, $data){
+        return $this->userRepository->update($id, $data);
+    }
+
     public function updateUserPassword($data)
     {
         $status = Password::reset($data, function ($user, $password) {
