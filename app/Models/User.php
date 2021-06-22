@@ -45,12 +45,6 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword, Must
         'email_verified_at' => 'datetime',
     ];
 
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = Hash::make($value);
-    }
-
-
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
@@ -77,4 +71,14 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword, Must
         $url = config("app.frontend_url")."/auth/reset-password?token=$token";
         $this->notify(new ResetPasswordNotification($url));
     }
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = Hash::make($value);
+    }
+
+    public function searches(){
+        return $this->belongsToMany(Search::class);
+    }
+
 }
