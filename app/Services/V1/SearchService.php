@@ -38,12 +38,12 @@ class SearchService
 
     public function getLatitude(): string
     {
-        return $this->decoded_json->candidates[0]->geometry->location->lat;
+        return $this->decoded_json->candidates[0]->geometry->location->lat??"";
     }
 
     public function getLongitude(): string
     {
-        return $this->decoded_json->candidates[0]->geometry->location->lng;
+        return $this->decoded_json->candidates[0]->geometry->location->lng??"";
     }
 
     private function setUrl($location)
