@@ -6,7 +6,7 @@ namespace App\Services\V1;
 
 
 
-class FilterService implements Filter {
+class FilterContractService implements FilterContract {
 
     protected  SearchService $searchService;
     protected $receivedHotels;

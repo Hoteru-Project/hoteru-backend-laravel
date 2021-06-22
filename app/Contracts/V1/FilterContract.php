@@ -1,9 +1,9 @@
 <?php
 
 
-namespace App\Services\V1;
+namespace App\Contracts\V1;
 
-interface Filter
+interface FilterContract
 {
     public function filterHotels($filteringFeatures);
     public function getFilteredHotels();
