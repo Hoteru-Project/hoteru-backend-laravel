@@ -15,9 +15,9 @@ class CreateSearchesTable extends Migration
     {
         Schema::create('searches', function (Blueprint $table) {
             $table->id();
-            $table->string("search")->nullable("false");
-            $table->enum("type", ["place", "hotel"]);
-            $table->unsignedBigInteger("count");
+            $table->string("search")->nullable(false);
+            $table->enum("type", ["place", "hotel"])->nullable(false);
+            $table->unsignedBigInteger("count")->default(0);
             $table->timestamps();
 
             $table->unique(["search", "type"]);
