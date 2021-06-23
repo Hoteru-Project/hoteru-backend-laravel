@@ -46,7 +46,15 @@ class SearchController extends Controller
             $this->hotels = $this->sortHotels($data["sorting"],$this->hotels);
         }
 
-        $this->hotels = $this->groupService->getHotelsDistinct($this->hotels);
+        if($request->stars) {
+            $this->hotels = $this->filterHotelsByRating($request->stars,$this->hotels);
+        }
+
+        if($request->class) {
+            $this->hotels = $this->filterHotelsInRange($request->class,$this->hotels);
+        }
+
+//        $this->hotels = $this->groupService->getHotelsDistinct($this->hotels);
         return $this->hotels;
     }
 
@@ -55,10 +63,23 @@ class SearchController extends Controller
         return $this->groupService->getHotelsAlike($request->query());
     }
 
+    // based on main amenities
     public function filterHotels ($filterParam,$hotels): array {
         $filteredHotels = new FilterService($hotels);
         $filteredHotels->filterHotels($filterParam);
         return $filteredHotels->getFilteredHotels();
+    }
+
+    //  based on stars score
+    public function filterHotelsByStarsRating ($stars,$hotels): array {
+        $filteredHotels = new FilterService($hotels);
+        return $filteredHotels->filterByStars($stars);
+    }
+
+    // based on overall ratings in a range
+    public function filterHotelsInRange ($class,$hotels): array {
+        $filteredHotels = new FilterService($hotels);
+        return $filteredHotels->filterInRange($class);
     }
 
     public function sortHotels($sortID,$hotels) {
