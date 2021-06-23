@@ -36,15 +36,15 @@ class SearchController extends Controller
     public function index(Request $request) {
         $this->hotels = $this->searchService->getHotels($request->query());
 
-        if($request->filter) {
-            $this->hotels = $this->filterHotels($request->filter,$this->hotels);
-        }
+//        $this->hotels = $this->groupService->getHotelsDistinct($this->hotels);
+//        if($request->filter) {
+//            $this->hotels = $this->filterHotels($request->filter,$this->hotels);
+//        }
 
         if($request->sorting) {
             $this->hotels = $this->sortHotels($request->sorting,$this->hotels);
         }
 
-        $this->hotels = $this->groupService->getHotelsDistinct($this->hotels);
         return $this->hotels;
     }
 
