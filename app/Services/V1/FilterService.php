@@ -70,11 +70,11 @@ class FilterService implements FilterContract {
 
     // filters hotels based on overAll rating between ranges
     public function filterInRange($class){
-        //         overallRating >= 8.5 => class A => 'Excellent'
-        // 8.5  >  overallRating >= 8.0 => class B => 'Very good'
-        // 8.0  >  overallRating >= 7.5 => class C => 'Good'
-        // 7.5  >  overallRating >= 7.0 => class D => 'Fair'
-        // 7.0  >  overallRating        => class E => 'Okay'
+        //         overallRating >= 8.5 => 'excellent'
+        // 8.5  >  overallRating >= 8.0 => 'very-good'
+        // 8.0  >  overallRating >= 7.5 => 'good'
+        // 7.5  >  overallRating >= 7.0 => 'fair'
+        // 7.0  >  overallRating        => 'okay'
 
         function in_range ($number, $min, $max, $inclusive = FALSE) {
             if (is_double($number) && is_double($min) && is_double($max)) {
@@ -86,11 +86,11 @@ class FilterService implements FilterContract {
         }
 
         switch ($class) {
-            case "A": $max = 10.0; $min = 8.5; break;
-            case "B": $max = 8.5;  $min = 8.0; break;
-            case "C": $max = 8.0;  $min = 7.5; break;
-            case "D": $max = 7.5;  $min = 7.0; break;
-            case "E": $max = 7.0;  $min = 0.0; break;
+            case "excellent": $max = 10.0; $min = 8.5; break;
+            case "very-good": $max = 8.5;  $min = 8.0; break;
+            case "good": $max = 8.0;  $min = 7.5; break;
+            case "fair": $max = 7.5;  $min = 7.0; break;
+            case "okay": $max = 7.0;  $min = 0.0; break;
         }
         $hotels = $this->receivedHotels;
         $matchedHotels = [];
