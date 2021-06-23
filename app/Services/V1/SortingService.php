@@ -5,7 +5,7 @@ namespace App\Services\V1;
 
 use App\Services\V1\FormatterService;
 use App\Services\V1\SearchService;
-use App\Services\V1\FilterContractService;
+use App\Services\V1\FilterService;
 use Illuminate\Support\Facades\Request;
 
 

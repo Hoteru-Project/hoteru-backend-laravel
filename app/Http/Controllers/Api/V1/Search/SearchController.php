@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\V1\Search;
 use App\Services\V1\FormatterService;
 use App\Services\V1\GroupService;
 use App\Services\V1\SearchService;
-use App\Services\V1\FilterContractService;
+use App\Services\V1\FilterService;
 use App\Services\V1\SortingService;
 
 
@@ -21,7 +21,7 @@ class SearchController extends Controller
 {
     protected SearchService $searchService;
     protected FormatterService $formatterService;
-    protected FilterContractService $filterService;
+    protected FilterService $filterService;
     protected GroupService $groupService;
     protected SortingService $sortingService;
     protected array $hotels = array();
@@ -34,15 +34,14 @@ class SearchController extends Controller
 
 
     public function index(Request $request) {
-
         $this->hotels = $this->searchService->getHotels($request->query());
 
         if($request->filter) {
-            $hotels = $this->filterHotels($request->filter,$this->hotels);
+            $this->hotels = $this->filterHotels($request->filter,$this->hotels);
         }
 
         if($request->sorting) {
-            $hotels = $this->sortHotels($request->sorting,$this->hotels);
+            $this->hotels = $this->sortHotels($request->sorting,$this->hotels);
         }
 
         $this->hotels = $this->groupService->getHotelsDistinct($this->hotels);
@@ -55,7 +54,7 @@ class SearchController extends Controller
     }
 
     public function filterHotels ($filterParam,$hotels): array {
-        $filteredHotels = new FilterContractService($hotels);
+        $filteredHotels = new FilterService($hotels);
         $filteredHotels->filterHotels($filterParam);
         return $filteredHotels->getFilteredHotels();
     }
