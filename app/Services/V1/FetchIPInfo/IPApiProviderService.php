@@ -21,7 +21,7 @@ class IPApiProviderService extends FetchIPInfo
      * @param Response $response
      * @return array
      */
-    #[ArrayShape(["country" => "mixed", "city" => "mixed", "lat" => "mixed", "long" => "mixed", "timezone" => "mixed"])]
+    #[ArrayShape(["country" => "string", "city" => "string", "lat" => "string", "long" => "string", "timezone" => "string"])]
     public function reformatResponse(Response $response): array
     {
         return [

@@ -34,7 +34,7 @@ class IPInfoProviderService extends FetchIPInfo
      * @param Response $response
      * @return array
      */
-    #[ArrayShape(["country" => "string", "city" => "string", "long" => "string", "lat" => "string", "timezone" => "string"])]
+    #[ArrayShape(["country" => "string", "city" => "string", "lat" => "string", "long" => "string", "timezone" => "string"])]
     public function reformatResponse(Response $response): array
     {
         $location = explode(",", $response["loc"]);
