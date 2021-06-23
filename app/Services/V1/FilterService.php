@@ -97,7 +97,7 @@ class FilterService implements FilterContract {
         foreach ($hotels as $hotel) {
             ! in_range($hotel->guestReviews->overallRating,$min,$max)?: array_push($matchedHotels,$hotel) ;
         }
-        dd($matchedHotels);
+
         return $matchedHotels;
     }
 

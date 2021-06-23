@@ -47,7 +47,7 @@ class SearchController extends Controller
         }
 
         if($request->stars) {
-            $this->hotels = $this->filterHotelsByRating($request->stars,$this->hotels);
+            $this->hotels = $this->filterHotelsByStarsRating($request->stars,$this->hotels);
         }
 
         if($request->class) {
