@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Search;
 
+use App\Http\Requests\Api\V1\SearchRequest;
 use App\Services\V1\FormatterService;
 use App\Services\V1\GroupService;
 use App\Services\V1\SearchService;
@@ -33,15 +34,16 @@ class SearchController extends Controller
     }
 
 
-    public function index(Request $request) {
+    public function index(SearchRequest $request) {
+        $data = $request->validated();
+        $this->hotels = $this->searchService->getHotels($data);
 
-        $this->hotels = $this->searchService->getHotels($request->query());
-        if($request->filter) {
-            $this->hotels = $this->filterHotels($request->filter,$this->hotels);
+        if(isset($data["filter"])) {
+            $this->hotels = $this->filterHotels($data["filter"],$this->hotels);
         }
 
-        if($request->sorting) {
-            $this->hotels = $this->sortHotels($request->sorting,$this->hotels);
+        if(isset($data["sorting"])) {
+            $this->hotels = $this->sortHotels($data["sorting"],$this->hotels);
         }
 
         $this->hotels = $this->groupService->getHotelsDistinct($this->hotels);
