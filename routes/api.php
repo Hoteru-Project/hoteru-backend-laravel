@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\Search\SearchController;
 use App\Http\Controllers\Api\V1\Filter\FilterController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\Auth;
+use App\Http\Controllers\Api\V1\HotelController;
 use App\Http\Controllers\APIFormaterController;
 use App\Http\Controllers\Api\V1\UserController;
 
@@ -37,6 +38,9 @@ Route::middleware('api')->prefix('v1')->group(function () {
     });
 
     Route::prefix('hotels')->group(function () {
+        Route::get("near",  [HotelController::class, "near"])->name("hotels.near");
+        Route::get("popular", [HotelController::class, "popular"])->name("hotels.popular");
+        Route::get("recent", [HotelController::class, "recent"])->name("hotels.recent");
         Route::get('/{searchQuery}', [SearchController::class, 'index']);
     });
 
@@ -47,6 +51,4 @@ Route::middleware('api')->prefix('v1')->group(function () {
     Route::prefix('formatter')->group(function () {
         Route::get('/', [APIFormaterController::class, 'index']);
     });
-
 });
-

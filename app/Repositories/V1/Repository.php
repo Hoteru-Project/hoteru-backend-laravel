@@ -20,9 +20,9 @@ abstract class Repository implements RepositoryContract
 
     public function update($id, $data)
     {
-        $user = $this->getById($id);
-        $user->update($data);
-        return $user;
+        $model = $this->getById($id);
+        $model->update($data);
+        return $model;
     }
 
     public function save($data)
