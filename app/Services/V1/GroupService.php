@@ -34,7 +34,8 @@ class GroupService extends SearchService
     public function getHotelsAlike($query): array
     {
         $found = array();
-        $this->hotels = parent::getHotels($query);
+        $user = auth("api")->user();
+        $this->hotels = parent::getHotels($user, $query);
         foreach ($this->hotels as $hotel){
             if ($query["name"] == $hotel->name){
                 $found[] = $hotel;

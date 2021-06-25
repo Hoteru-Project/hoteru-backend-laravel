@@ -40,7 +40,7 @@ class SearchService
         $this->formatterService->setParams($this->baseUrl, $this->providers, $this->apiParams);
         $hotels =  $this->formatterService->getAPI();
 
-        if($hotels){
+        if(isset($data["search"]) && $hotels){
             $this->addUserSearch($user, $data);
             $hotels = $this->currencyService->changePrice($hotels, $data);
 
