@@ -4,6 +4,7 @@
 namespace App\Services\V1;
 
 
+use App\Repositories\V1\SearchRepository;
 use Illuminate\Support\Facades\Http;
 use \Illuminate\Http\Client\Response;
 
@@ -16,10 +17,12 @@ class SearchService
     protected FormatterService $formatterService;
     private Object $decoded_json;
     private string $apiParams;
+    private SearchRepository $searchRepository;
 
-    function __construct(FormatterService $formatterService)
+    function __construct(FormatterService $formatterService, SearchRepository $searchRepository)
     {
         $this->formatterService = $formatterService;
+        $this->searchRepository = $searchRepository;
         $this->key = env("GOOGLE_KEY");
         $this->providers = explode(',', env("API_PROVIDERS"));
         $this->baseUrl = env("API_URL");
@@ -63,5 +66,15 @@ class SearchService
         if ($decoded_json->status != "OK") {
             dd("no results response from search service");
         }
+    }
+
+    public function addUserSearch($user, $data){
+        $search =  $this->searchRepository->getOrCreateSearch($data);
+        $search->count++;
+        $this->searchRepository->update($search->id, $search->toArray());
+        if($user){
+            $this->searchRepository->attachUser($search->id, $user->id);
+        }
+        return ["success" => true];
     }
 }

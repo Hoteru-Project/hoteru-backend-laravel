@@ -19,4 +19,13 @@ class SearchRepository extends Repository
         $this->model = $search;
     }
 
+    public function getOrCreateSearch($data): Search
+    {
+        return $this->model->where("search", $data["search"])->where("type", $data["type"])->first()??$this->save($data);
+    }
+
+    public function attachUser($id, $userId){
+        $this->getById($id)->users()->attach($userId);
+    }
+
 }

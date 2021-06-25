@@ -35,8 +35,16 @@ class SearchController extends Controller
 
 
     public function index(SearchRequest $request) {
+        $user = auth("api")->user();
         $data = $request->validated();
         $this->hotels = $this->searchService->getHotels($data);
+
+        $data["search"] = $data["location"];
+        $data["type"] = $data["locationType"];
+
+        if($this->hotels){
+            $this->searchService->addUserSearch($user, $data);
+        }
 
         if(isset($data["filter"])) {
             $this->hotels = $this->filterHotels($data["filter"],$this->hotels);
@@ -93,13 +101,5 @@ class SearchController extends Controller
         return $hotels;
     }
     // example url 127.0.0.1:8001/api/v1/hotels/test?checkIn=2021-06-07&checkOut=2021-06-08&location=alexandria&rooms=1&sorting=2&filter=pool
-
-
-//    public function getHotelById($id): JsonResponse
-//    {
-//        $url = self::URL . '/' . $id;
-//        $response = Http::get($url);
-//        return response()->json(['hotel' => json_decode($response)]);
-//    }
 
 }
