@@ -62,7 +62,7 @@ class SearchController extends Controller
             $this->hotels = $this->filterHotelsInRange($request->class,$this->hotels);
         }
 
-//        $this->hotels = $this->groupService->getHotelsDistinct($this->hotels);
+        $this->hotels = $this->groupService->getHotelsDistinct($this->hotels);
         return $this->hotels;
     }
 
