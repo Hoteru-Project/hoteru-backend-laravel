@@ -68,7 +68,7 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword, Must
 
     public function sendPasswordResetNotification($token)
     {
-        $url = config("app.frontend_url")."/auth/reset-password?token=$token";
+        $url = config("app.frontend_url") . "/auth/reset-password?token=$token";
         $this->notify(new ResetPasswordNotification($url));
     }
 
@@ -77,8 +77,8 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword, Must
         $this->attributes['password'] = Hash::make($value);
     }
 
-    public function searches(){
-        return $this->belongsToMany(Search::class);
+    public function searches()
+    {
+        return $this->belongsToMany(Search::class)->withTimestamps();
     }
-
 }
