@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\Auth;
 use App\Http\Controllers\Api\V1\HotelController;
 use App\Http\Controllers\APIFormaterController;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\Api\V1\Currency\CurrencyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +47,11 @@ Route::middleware('api')->prefix('v1')->group(function () {
 
     Route::prefix('hotel')->group(function () {
         Route::get('', [SearchController::class, 'getHotelByName']);
+    });
+
+    Route::prefix('currencies')->group(function () {
+        Route::get('/', [CurrencyController::class, 'index']);
+
     });
 
     Route::prefix('formatter')->group(function () {
