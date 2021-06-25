@@ -15,12 +15,13 @@ class SearchRequest extends FormRequest
     public function rules()
     {
         return [
-            "checkIn"  => ["required", "string", "date_format:Y-m-d"],
-            "checkOut" => ["required", "string", "date_format:Y-m-d"],
-            "location" => ["required", "string"],
-            "rooms"    => ["required", "integer", "min:1"],
-            "filter"   => ["string"],
-            "sorting"  => ["integer"],
+            "checkIn"       => ["required", "string", "date_format:Y-m-d"],
+            "checkOut"      => ["required", "string", "date_format:Y-m-d"],
+            "location"      => ["required", "string"],
+            "rooms"         => ["required", "integer", "min:1"],
+            "filter"        => ["string"],
+            "sorting"       => ["integer"],
+            "locationType"  => ["string", "in:hotel,place"]
         ];
     }
 }
