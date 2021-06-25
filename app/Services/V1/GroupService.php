@@ -10,9 +10,9 @@ class GroupService extends SearchService
 {
     protected array $hotels;
 
-    public function __construct(FormatterService $formatterService, SearchRepository $searchRepository)
+    public function __construct(FormatterService $formatterService, SearchRepository $searchRepository, CurrencyService $currencyService)
     {
-        parent::__construct($formatterService, $searchRepository);
+        parent::__construct($formatterService, $searchRepository, $currencyService);
     }
 
     /**

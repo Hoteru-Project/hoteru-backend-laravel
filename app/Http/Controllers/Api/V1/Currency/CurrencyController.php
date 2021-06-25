@@ -18,7 +18,7 @@ class CurrencyController extends Controller
 
     public function index (){
         $currencies = $this->currencyService->listCurrencies();
-        return response()->json($currencies,201);
+        return response()->json($currencies,200);
     }
 
 }

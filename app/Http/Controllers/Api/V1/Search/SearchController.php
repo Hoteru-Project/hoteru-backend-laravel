@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Search;
 
 use App\Http\Requests\Api\V1\SearchRequest;
+use App\Services\V1\CurrencyService;
 use App\Services\V1\FormatterService;
 use App\Services\V1\GroupService;
 use App\Services\V1\SearchService;
@@ -25,6 +26,7 @@ class SearchController extends Controller
     protected FilterService $filterService;
     protected GroupService $groupService;
     protected SortingService $sortingService;
+
     protected array $hotels = array();
 
     function __construct(SearchService $searchService, GroupService $groupService)
@@ -37,14 +39,11 @@ class SearchController extends Controller
     public function index(SearchRequest $request) {
         $user = auth("api")->user();
         $data = $request->validated();
-        $this->hotels = $this->searchService->getHotels($data);
 
         $data["search"] = $data["location"];
         $data["type"] = $data["locationType"];
 
-        if($this->hotels){
-            $this->searchService->addUserSearch($user, $data);
-        }
+        $this->hotels = $this->searchService->getHotels($user, $data);
 
         if(isset($data["filter"])) {
             $this->hotels = $this->filterHotels($data["filter"],$this->hotels);

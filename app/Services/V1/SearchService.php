@@ -17,26 +17,35 @@ class SearchService
     protected FormatterService $formatterService;
     private Object $decoded_json;
     private string $apiParams;
+    private CurrencyService $currencyService;
     private SearchRepository $searchRepository;
 
-    function __construct(FormatterService $formatterService, SearchRepository $searchRepository)
+    function __construct(FormatterService $formatterService, SearchRepository $searchRepository, CurrencyService $currencyService)
     {
         $this->formatterService = $formatterService;
         $this->searchRepository = $searchRepository;
+        $this->currencyService = $currencyService;
         $this->key = env("GOOGLE_KEY");
         $this->providers = explode(',', env("API_PROVIDERS"));
         $this->baseUrl = env("API_URL");
     }
 
-    public function getHotels($query): array
+    public function getHotels($user, $data): array
     {
-        $this->setUrl($query["location"]);
+        $this->setUrl($data["location"]);
         $this->decoded_json = json_decode(Http::get($this->url));
-        $this->setApiParams($query["checkIn"], $query["checkOut"],
-                            $this->getLatitude(), $this->getLongitude(), $query["rooms"]);
+        $this->setApiParams($data["checkIn"], $data["checkOut"],
+                            $this->getLatitude(), $this->getLongitude(), $data["rooms"]);
 
         $this->formatterService->setParams($this->baseUrl, $this->providers, $this->apiParams);
-        return $this->formatterService->getAPI();
+        $hotels =  $this->formatterService->getAPI();
+
+        if($hotels){
+            $this->addUserSearch($user, $data);
+            $hotels = $this->currencyService->changePrice($hotels, $data);
+
+        }
+        return $hotels;
     }
 
     public function getLatitude(): string

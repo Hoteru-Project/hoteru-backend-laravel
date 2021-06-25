@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
+use \TCG\Voyager\Facades\Voyager;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,5 +21,5 @@ Route::get('/', function () {
 
 
 Route::group(['prefix' => 'admin'], function () {
-  \TCG\Voyager\Facades\Voyager::routes();
+  Voyager::routes();
 });

@@ -21,7 +21,8 @@ class SearchRequest extends FormRequest
             "rooms"         => ["required", "integer", "min:1"],
             "filter"        => ["string"],
             "sorting"       => ["integer"],
-            "locationType"  => ["string", "in:hotel,place"]
+            "locationType"  => ["string", "in:hotel,place"],
+            "currency"      => ["string"]
         ];
     }
 }
