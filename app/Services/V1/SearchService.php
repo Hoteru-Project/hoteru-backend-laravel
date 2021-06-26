@@ -4,6 +4,7 @@
 namespace App\Services\V1;
 
 
+use App\Repositories\V1\ProviderRepository;
 use App\Repositories\V1\SearchRepository;
 use Illuminate\Support\Facades\Http;
 use \Illuminate\Http\Client\Response;
@@ -13,20 +14,20 @@ class SearchService
     protected string $key;
     protected string $url;
     protected string $baseUrl;
-    protected array $providers;
     protected FormatterService $formatterService;
     private Object $decoded_json;
     private string $apiParams;
     private CurrencyService $currencyService;
     private SearchRepository $searchRepository;
+    private ProviderRepository $providerRepository;
 
-    function __construct(FormatterService $formatterService, SearchRepository $searchRepository, CurrencyService $currencyService)
+    function __construct(FormatterService $formatterService, SearchRepository $searchRepository, CurrencyService $currencyService, ProviderRepository $providerRepository)
     {
         $this->formatterService = $formatterService;
         $this->searchRepository = $searchRepository;
         $this->currencyService = $currencyService;
         $this->key = env("GOOGLE_KEY");
-        $this->providers = explode(',', env("API_PROVIDERS"));
+        $this->providerRepository = $providerRepository;
         $this->baseUrl = env("API_URL");
     }
 
@@ -37,7 +38,7 @@ class SearchService
         $this->setApiParams($data["checkIn"], $data["checkOut"],
                             $this->getLatitude(), $this->getLongitude(), $data["rooms"]);
 
-        $this->formatterService->setParams($this->baseUrl, $this->providers, $this->apiParams);
+        $this->formatterService->setParams($this->baseUrl, $this->providerRepository->index(), $this->apiParams);
         $hotels =  $this->formatterService->getAPI();
 
         if(isset($data["search"]) && $hotels){

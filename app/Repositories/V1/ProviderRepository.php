@@ -19,4 +19,9 @@ class ProviderRepository extends Repository
         $this->model = $provider;
     }
 
+    public function index()
+    {
+        return $this->model->all();
+    }
+
 }

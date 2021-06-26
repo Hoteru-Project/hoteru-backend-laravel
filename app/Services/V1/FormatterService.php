@@ -4,12 +4,13 @@ namespace App\Services\V1;
 
 use GuzzleHttp\Promise;
 use GuzzleHttp\Client as GuzzleHttpClient;
+use Illuminate\Database\Eloquent\Collection;
 
 class FormatterService
 {
 
     private string $baseUrl;
-    private array $providers;
+    private Collection $providers;
     private string $params;
     private string $api_token;
 
@@ -34,7 +35,7 @@ class FormatterService
     function getAPI()
     {
         // getting Data From Different APIs
-        $client = new GuzzleHttpClient(['base_uri' => $this->baseUrl]);
+        $client = new GuzzleHttpClient();
 
         // get all promises requests from providers
         $promises = $this->getPromises($this->providers, $client);
@@ -56,7 +57,7 @@ class FormatterService
         $i = 1;
         $totalPromises = [];
         foreach ($providers as $provider) {
-            $totalPromises["res" . $i] = $client->getAsync("api/" . $provider . "?" . $this->params, ['headers' => ["authorization" => $this->api_token]]);
+            $totalPromises["res" . $i] = $client->getAsync($provider["api"] . "?" . $this->params, ['headers' => ["authorization" => $this->api_token]]);
             $i++;
         }
         return $totalPromises;

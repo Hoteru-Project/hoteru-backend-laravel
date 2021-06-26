@@ -4,15 +4,16 @@
 namespace App\Services\V1;
 
 
+use App\Repositories\V1\ProviderRepository;
 use App\Repositories\V1\SearchRepository;
 
 class GroupService extends SearchService
 {
     protected array $hotels;
 
-    public function __construct(FormatterService $formatterService, SearchRepository $searchRepository, CurrencyService $currencyService)
+    public function __construct(FormatterService $formatterService, SearchRepository $searchRepository, CurrencyService $currencyService, ProviderRepository $providerRepository)
     {
-        parent::__construct($formatterService, $searchRepository, $currencyService);
+        parent::__construct($formatterService, $searchRepository, $currencyService, $providerRepository);
     }
 
     /**
