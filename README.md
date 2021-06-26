@@ -1,62 +1,98 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# PHP
+```sudo apt install software-properties-common```
+```sudo add-apt-repository ppa:ondrej/php```
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Installing PHP as an Apache module is a straightforward task:
+```sudo apt update```
+```sudo apt install php8.0 libapache2-mod-php8.0```
 
-## About Laravel
+# Composer
+First, update the package manager cache by running:
+```sudo apt update```
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Next, run the following command to install the required packages:
+```sudo apt install php-cli unzip```
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Make sure you’re in your home directory, then retrieve the installer using curl:
+```cd ~```
+```curl -sS https://getcomposer.org/installer -o composer-setup.php```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
+Next, we’ll verify that the downloaded installer matches the SHA-384 hash for the latest installer found
+```HASH=`curl -sS https://composer.github.io/installer.sig`
+php -r "if (hash_file('SHA384', 'composer-setup.php') === '$HASH') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+You’ll see the following output:
+```Installer verified```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## Laravel Sponsors
+To install composer globally, use the following command which will download and install Composer as a system-wide command named composer, under /usr/local/bin:
+```sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
-### Premium Partners
+To test your installation, run:
+```composer```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
+# Installing mysql
 
-## Contributing
+```sudo apt-get update```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```sudo apt-get install mysql```
 
-## Code of Conduct
+To create new user in mysql run:
+```sudo mysql -u root -p```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Now add this line to create new user:
+```CREATE USER 'newuser'@'localhost' IDENTIFIED BY 'password';```
 
-## Security Vulnerabilities
+now you can use this user in the laravel application.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+# Laravel
+``` git clone https://github.com/Hoteru-Project/hoteru-backend-laravel.git```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```cd hoteru-backend-laravel```
+
+```composer install```
+
+rename .env.example to .env
+Run``` php artisan key:generate```
+Run ```php artisan migrate```
+
+#### Configure database and add the following lines to it
+##### For requesting google maps apis
+##### GOOGLE_KEY=
+#### Nodejs key to fetch hotels data (providers)
+#### API_TOKEN=
+#### Nodejs Applocation base url
+#### API_URL=http://localhost:8080
+#### Frontend application URI to send emails to redirect to.
+#### APP_FRONTEND_URL=http://localhost:3000
+
+
+#### IP Info Provider to get IP data
+#### IPINFO_PROVIDER_TOKEN=
+
+#### Currency Converter API Key to convert Currency
+#### CURRCONV_API_KEY=
+
+Now Generate secret key for JWT:
+```php artisan jwt:secret```
+
+You are all ready now in laravel
+
+To create admin user type:
+```php artisan voyager:admin your@email.com --create```
+
+
+Now you need to migrate voyager seeds
+```php artisan db:seed --class=DataTypesTableSeeder```
+```php artisan db:seed --class=DataRowsTableSeeder```
+```php artisan db:seed --class=MenusTableSeeder```
+```php artisan db:seed --class=MenuItemsTableSeeder```
+```php artisan db:seed --class=RolesTableSeeder```
+```php artisan db:seed --class=PermissionsTableSeeder```
+```php artisan db:seed --class=PermissionRoleTableSeeder```
+
+Run ```php artisan serve```
+
