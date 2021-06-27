@@ -25,6 +25,7 @@ class HotelService
     }
     public function getNearHotels($ip)
     {
+        $user = auth("api")->user();
         $ipInfo = (new IPApiProviderService())->fetch($ip) ?? (new IPInfoProviderService())->fetch($ip);
         $location = "{$ipInfo['city']}, {$ipInfo['country']}";
         $query = [
@@ -34,7 +35,7 @@ class HotelService
             "rooms" => 1
         ];
 
-        return $this->searchService->getHotels($query);
+        return $this->searchService->getHotels($user, $query);
     }
     public function getRecentHotels($user, $data)
     {
